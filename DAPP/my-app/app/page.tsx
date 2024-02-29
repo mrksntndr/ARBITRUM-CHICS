@@ -3,7 +3,7 @@ import { BrowserProvider } from "ethers";
 import { JsonRpcProvider } from "ethers/providers";
 import { useEffect, useState } from "react";
 import { getContract } from "../../config";
-import Background from "../public/images/bg.png";
+import Background from "../public/images/bg4.png";
 import Image from "next/image";
 
 export default function Home() {
@@ -204,22 +204,22 @@ export default function Home() {
 
   return (
     <main className="min-h-screen text-white flex flex-col items-center justify-center space-y-6"
-    style={{
-      backgroundImage: `url(${Background.src})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundPositionY: "80%",
-      overflow: "hidden",
-    }}>
-      <div>
-      <Image
-              src="/images/manok.webp"
-              alt="Left Image"
-              width={300}
-              height={300}
-              className="mr-5"
-            />
+      style={{
+        backgroundImage: `url(${Background.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundPositionY: "80%",
+        overflow: "hidden",
+      }}>
+      <div className="flex items-center justify-center mb-6">
+        <Image
+          src="/images/chikipibg.png"
+          alt="Image"
+          width={200}
+          height={200}
+          className="rounded-full object-cover opacity-95"
+        />
       </div>
       <div className="flex flex-col items-center mb-6">
         {walletKey ? (
@@ -238,10 +238,10 @@ export default function Home() {
           </button>
         )}
       </div>
-
+  
       <div className="flex space-x-4">
-        <div className="bg-gray-800 p-6 rounded shadow-md w-full max-w-md">
-          <h2 className="text-xl font-bold mb-4">Mint CHICOINS</h2>
+        <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md">
+          <h2 className="text-xl font-bold mb-4">Mint CHICS</h2>
           <div className="mb-4">
             <label htmlFor="mintAmount" className="text-gray-400 block">
               Enter Minting Amount:
@@ -277,9 +277,8 @@ export default function Home() {
           )}
         </div>
   
-  
-        <div className="bg-gray-800 p-6 rounded shadow-md w-full max-w-md">
-          <h2 className="text-xl font-bold mb-4">Stake CHICOINS</h2>
+        <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md">
+          <h2 className="text-xl font-bold mb-4">Stake CHICS</h2>
           <div className="mb-4">
             <label htmlFor="stakingAmount" className="text-gray-400 block">
               Enter Staking Amount:
@@ -294,7 +293,7 @@ export default function Home() {
           </div>
           <button
             onClick={stakeCoin}
-            className="bg-blue-500 hover:bg-blue-700 transition text-white px-4 py-2 rounded w-full"
+            className="bg-yellow-500 hover:bg-yellow-700 transition text-white px-4 py-2 rounded w-full"
           >
             Stake
           </button>
@@ -313,28 +312,34 @@ export default function Home() {
           )}
         </div>
       </div>
-
-      <div className="bg-gray-800 p-6 rounded shadow-md w-full max-w-md w-90">
+  
+      <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md w-90">
         <div>
-          <p className="text-xl font-bold mb-4">Withdraw CHICOINS</p>
+          <p className="text-xl font-bold mb-4">Owned CHICS</p>
         </div>
-        <p>
-          <span className=" text-gray-400">Current CHICS:  &nbsp;</span>
+        <p className="flex items-center mb-4">
+          <span className="text-gray-400">Current CHICS: &nbsp;</span>
           <span className="text-gray-300">
-              {balanceString}
-            </span>
-
-          <button 
+            {balanceString}
+          </span>
+          <Image
+            src="/images/manok.webp"
+            alt="Additional Image"
+            width={20}
+            height={20}
+            className="ml-2"
+          />
+          <button
             onClick={() => {
               getBalance();
             }}
+            className="ml-2"
           >
             <Image
               src="/images/rfrsh.svg"
               alt="Left Image"
               width={13}
               height={13}
-              className="ml-2 "
               style={{ filter: "invert(1)", transition: "transform 0.3s" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.1)";
@@ -345,23 +350,29 @@ export default function Home() {
             />
           </button>
         </p>
-        <p>
-          <span className="mb-1 text-gray-400">Staked CHICS: &nbsp;</span>
+        <p className="flex items-center mb-4">
+          <span className="text-gray-400">Staked CHICS: &nbsp;</span>
           <span className="text-gray-300">
-              {stakedAmountString}
-            </span>
-
-          <button 
+            {stakedAmountString}
+          </span>
+          <Image
+            src="/images/manok.webp"
+            alt="Additional Image"
+            width={20}
+            height={20}
+            className="ml-2"
+          />
+          <button
             onClick={() => {
               getStake();
             }}
+            className="ml-2"
           >
             <Image
               src="/images/rfrsh.svg"
               alt="Left Image"
               width={13}
               height={13}
-              className="ml-2 mt-5"
               style={{ filter: "invert(1)", transition: "transform 0.3s" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.1)";
@@ -372,23 +383,29 @@ export default function Home() {
             />
           </button>
         </p>
-        <p>
-        <span className="mb-1 text-gray-400">Withdrawable CHICS: &nbsp;</span>
+        <p className="flex items-center mb-4">
+          <span className="text-gray-400">Withdrawable CHICS: &nbsp;</span>
           <span className="text-gray-300">
-              {withdrawAmountString}
-            </span>
-
-          <button 
+            {withdrawAmountString}
+          </span>
+          <Image
+            src="/images/manok.webp"
+            alt="Additional Image"
+            width={20}
+            height={20}
+            className="ml-2"
+          />
+          <button
             onClick={() => {
               getWithdrawAmount();
             }}
+            className="ml-2"
           >
             <Image
               src="/images/rfrsh.svg"
               alt="Left Image"
               width={13}
               height={13}
-              className="ml-2 mt-5"
               style={{ filter: "invert(1)", transition: "transform 0.3s" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.1)";
@@ -398,12 +415,10 @@ export default function Home() {
               }}
             />
           </button>
-          
         </p>
-
         <button
           onClick={withdrawCoin}
-          className="bg-red-500 hover:bg-red-700 transition text-white px-4 py-2 rounded w-full mt-4"
+          className="bg-blue-500 hover:bg-blue-700 transition text-white px-4 py-2 rounded w-full mt-4"
         >
           Withdraw
         </button>

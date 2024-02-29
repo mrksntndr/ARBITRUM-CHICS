@@ -20,7 +20,7 @@
 body {
   color: rgb(var(--foreground-rgb));
   background-image: 
-    url('../public/images/bg.png'); /* Replace 'path/to/your/image.jpg' with the actual path to your image file */
+    url('../public/images/bg4.png'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
