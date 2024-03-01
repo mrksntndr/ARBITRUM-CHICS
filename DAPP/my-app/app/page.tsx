@@ -383,6 +383,45 @@ export default function Home() {
             />
           </button>
         </p>
+
+        <p className="flex items-center mb-4">
+          <span className="text-gray-400">Incubating CHICS: &nbsp;</span>
+          <span className="text-gray-300">
+          <span style={{ color: elapsedStakeTime > 60 ? "LightGreen" : "Yellow" }}>
+              {elapsedStakeTime > 60
+                ? "You can now get CHICS"
+                : "Still Hatching"}
+          </span>
+            </span>
+            <Image
+            src="/images/manok.webp"
+            alt="Additional Image"
+            width={20}
+            height={20}
+            className="ml-2"
+          />
+          <button
+            onClick={() => {
+              getElapsedStakeTime();
+            }}
+          
+            >
+            <Image  className="ml-2"
+              src="/images/rfrsh.svg"
+              alt="Left Image"
+              width={13}
+              height={13}
+              style={{ filter: "invert(1)", transition: "transform 0.3s" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            />
+          </button>
+          </p> 
+
         <p className="flex items-center mb-4">
           <span className="text-gray-400">Withdrawable CHICS: &nbsp;</span>
           <span className="text-gray-300">
