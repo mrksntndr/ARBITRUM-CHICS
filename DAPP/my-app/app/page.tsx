@@ -147,9 +147,13 @@ export default function Home() {
     const signer = await provider.getSigner();
     const contract = getContract(signer);
     try {
-      const withdrawAmount = await contract.getWithdraw(signer);
-
-      setWithdrawAmount(withdrawAmount);
+      const stakedAmount = await contract.getStake(signer);
+      if (stakedAmount > 0) {
+        const withdrawAmount = await contract.getWithdraw(signer);
+        setWithdrawAmount(withdrawAmount);
+      } else {
+        setWithdrawAmount(0);
+      }
     } catch (e: any) {
       console.log("Error data:", e.data);
       if (e.data) {
@@ -404,9 +408,9 @@ export default function Home() {
             onClick={() => {
               getElapsedStakeTime();
             }}
-          
+            className="ml-2"
             >
-            <Image  className="ml-2"
+            <Image  
               src="/images/rfrsh.svg"
               alt="Left Image"
               width={13}
