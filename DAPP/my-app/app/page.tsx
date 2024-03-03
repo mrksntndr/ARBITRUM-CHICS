@@ -7,29 +7,28 @@ import Background from "../public/images/bg4.png";
 import Image from "next/image";
 
 export default function Home() {
-  const [mintingAmount, setMintingAmount] = useState<number>(0);
-  const [submittedMint, setSubmittedMint] = useState(false);
-  const [transactionHashMint, setTransactionHashMint] = useState("");
+  const [mintInput, setMintInput] = useState<number>(0);
+  const [mintOut, setMintOut] = useState(false);
+  const [mintHash, setMintHash] = useState("");
 
   const [balance, setBalance] = useState<number>(0);
   const [walletKey, setwalletKey] = useState("");
-  const [stakingAmount, setStakingAmount] = useState<number>(0);
-  const [stakedAmount, setStakedAmount] = useState<number>(0);
-  const [submittedStake, setSubmittedStake] = useState(false);
-  const [transactionHashStake, setTransactionHashStake] = useState("");
-
-  const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
-  const [elapsedStakeTime, setElapsedStakeTime] = useState<number>(0);
-  const [submittedWithdraw, setSubmittedWithdraw] = useState(false);
-  const [transactionHashWithdraw, setTransactionHashWithdraw] = useState("");
-
   const balanceString = balance?.toString();
-  const stakedAmountString = stakedAmount?.toString();
-  const withdrawAmountString = withdrawAmount?.toString();
+
+  const [stakeInput, setStakeInput] = useState<number>(0);
+  const [stakeOut, setStakeOut] = useState(false);
+  const [stakeTotal, setStakeTotal] = useState<number>(0);
+  const [stakeHash, setStakeHash] = useState("");
+  const stakeTotalString = stakeTotal?.toString();
+
+  const [withdrawInput, setWithdrawInput] = useState<number>(0);
+  const [withdrawOut, setWithdrawOut] = useState(false);
+  const [elapsedStakeTime, setElapsedStakeTime] = useState<number>(0);
+  const [withdrawHash, setWithdrawHash] = useState("");
+  const withdrawInputString = withdrawInput?.toString();
 
   const connectWallet = async () => {
     const { ethereum } = window as any;
-
     await ethereum.request({
       method: "wallet_addEthereumChain",
       params: [
@@ -70,23 +69,23 @@ export default function Home() {
     const signer = await provider.getSigner();
     const contract = getContract(signer);
     try {
-      const tx = await contract.mint(signer, mintingAmount);
+      const tx = await contract.mint(signer, mintInput);
       await tx.wait();
-      setSubmittedMint(true);
-      setTransactionHashMint(tx.hash);
+      setMintOut(true);
+      setMintHash(tx.hash);
     } catch (e: any) {
       const decodedError = contract.interface.parseError(e.data);
-      alert(`Minting failed: ${decodedError?.args}`);
+      alert(`Mint Unsucessful: ${decodedError?.args}`);
     }
   };
 
   const amountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     if (!isNaN(Number(inputValue))) {
-      setMintingAmount(Number(inputValue));
+      setMintInput(Number(inputValue));
       console.log(inputValue);
     } else {
-      setMintingAmount(0);
+      setMintInput(0);
     }
   };
 
@@ -97,14 +96,14 @@ export default function Home() {
     const contract = getContract(signer);
     try {
       const stakedInEth = await contract.getStake(signer);
-      setStakedAmount(stakedInEth);
+      setStakeTotal(stakedInEth);
     } catch (e: any) {
       console.log("Error data:", e.data);
       if (e.data) {
         const decodedError = contract.interface.parseError(e.data);
-        console.log(`Fetching stake failed: ${decodedError?.args}`);
+        console.log(`Stakie Failed: ${decodedError?.args}`);
       } else {
-        console.log("An unknown error occurred.");
+        console.log("An unknown has error occurred.");
       }
     }
   };
@@ -115,13 +114,13 @@ export default function Home() {
     const signer = await provider.getSigner();
     const contract = getContract(signer);
     try {
-      const tx = await contract.stake(stakingAmount);
+      const tx = await contract.stake(stakeInput);
       await tx.wait();
-      setSubmittedStake(true);
-      setTransactionHashStake(tx.hash);
+      setStakeOut(true);
+      setStakeHash(tx.hash);
     } catch (e: any) {
       const decodedError = contract.interface.parseError(e.data);
-      alert(`Minting failed: ${decodedError?.args}`);
+      alert(`Mint failed: ${decodedError?.args}`);
     }
   };
 
@@ -133,34 +132,34 @@ export default function Home() {
     try {
       const tx = await contract.withdraw();
       await tx.wait();
-      setSubmittedWithdraw(true);
-      setTransactionHashWithdraw(tx.hash);
+      setWithdrawOut(true);
+      setWithdrawHash(tx.hash);
     } catch (e: any) {
       const decodedError = contract.interface.parseError(e.data);
-      alert(`Minting failed: ${decodedError?.args}`);
+      alert(`Mint failed: ${decodedError?.args}`);
     }
   };
 
-  const getWithdrawAmount = async () => {
+  const getWithdrawInput = async () => {
     const { ethereum } = window as any;
     const provider = new BrowserProvider(ethereum);
     const signer = await provider.getSigner();
     const contract = getContract(signer);
     try {
-      const stakedAmount = await contract.getStake(signer);
-      if (stakedAmount > 0) {
-        const withdrawAmount = await contract.getWithdraw(signer);
-        setWithdrawAmount(withdrawAmount);
+      const stakeTotal = await contract.getStake(signer);
+      if (stakeTotal > 0) {
+        const withdrawInput = await contract.getWithdraw(signer);
+        setWithdrawInput(withdrawInput);
       } else {
-        setWithdrawAmount(0);
+        setWithdrawInput(0);
       }
     } catch (e: any) {
       console.log("Error data:", e.data);
       if (e.data) {
         const decodedError = contract.interface.parseError(e.data);
-        console.log(`Fetching stake failed: ${decodedError?.args}`);
+        console.log(`Failed: ${decodedError?.args}`);
       } else {
-        console.log("An unknown error occurred.");
+        console.log("An unknown have error occurred.");
       }
     }
   };
@@ -178,13 +177,12 @@ export default function Home() {
       console.log("Error data:", e.data);
       if (e.data) {
         const decodedError = contract.interface.parseError(e.data);
-        console.log(`Fetching stake failed: ${decodedError?.args}`);
+        console.log(`Failed: ${decodedError?.args}`);
       } else {
-        console.log("An unknown error occurred.");
+        console.log("An unknown have error occurred.");
       }
     }
   };
-
 
   const getBalance = async () => {
     const { ethereum } = window as any;
@@ -199,15 +197,16 @@ export default function Home() {
       console.log("Error data:", e.data);
       if (e.data) {
         const decodedError = contract.interface.parseError(e.data);
-        console.log(`Fetching stake failed: ${decodedError?.args}`);
+        console.log(`Failed: ${decodedError?.args}`);
       } else {
-        console.log("An unknown error occurred.");
+        console.log("An unknown have error occurred.");
       }
     }
   };
 
   return (
-    <main className="min-h-screen text-white flex flex-col items-center justify-center space-y-6"
+    <main
+      className="min-h-screen text-white flex flex-col items-center justify-center space-y-6"
       style={{
         backgroundImage: `url(${Background.src})`,
         backgroundSize: "cover",
@@ -215,7 +214,8 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
         backgroundPositionY: "80%",
         overflow: "hidden",
-      }}>
+      }}
+    >
       <div className="flex items-center justify-center mb-6">
         <Image
           src="/images/chikipibg.png"
@@ -242,7 +242,7 @@ export default function Home() {
           </button>
         )}
       </div>
-  
+
       <div className="flex space-x-4">
         <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md">
           <h2 className="text-xl font-bold mb-4">Mint CHICS</h2>
@@ -253,7 +253,7 @@ export default function Home() {
             <input
               type="number"
               id="mintAmount"
-              value={mintingAmount}
+              value={mintInput}
               onChange={amountChange}
               className="border rounded px-3 py-2 w-full text-white bg-gray-700 focus:bg-gray-900"
             />
@@ -264,34 +264,34 @@ export default function Home() {
           >
             Mint
           </button>
-          {submittedMint && (
+          {mintOut && (
             <div className="text-center">
               <p className="text-green-500 mt-2">
                 Minting Successful!{" "}
                 <a
-                  href={`https://etherscan.io/tx/${transactionHashMint}`}
+                  href={`https://etherscan.io/tx/${mintHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline text-blue-500"
                 >
-                  Click to view Transaction
+                  Click to view your Transaction
                 </a>
               </p>
             </div>
           )}
         </div>
-  
+
         <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md">
           <h2 className="text-xl font-bold mb-4">Stake CHICS</h2>
           <div className="mb-4">
-            <label htmlFor="stakingAmount" className="text-gray-400 block">
+            <label htmlFor="stakeInput" className="text-gray-400 block">
               Enter Staking Amount:
             </label>
             <input
               type="number"
-              id="stakingAmount"
-              value={stakingAmount}
-              onChange={(e) => setStakingAmount(Number(e.target.value))}
+              id="stakeInput"
+              value={stakeInput}
+              onChange={(e) => setStakeInput(Number(e.target.value))}
               className="border rounded px-3 py-2 w-full text-white bg-gray-700 focus:bg-gray-900"
             />
           </div>
@@ -301,31 +301,29 @@ export default function Home() {
           >
             Stake
           </button>
-          {submittedStake && (
+          {stakeOut && (
             <p className="text-green-500 mt-2">
               Staking successful! Transaction Hash:{" "}
               <a
-                href={`https://etherscan.io/tx/${transactionHashStake}`}
+                href={`https://etherscan.io/tx/${stakeHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline text-blue-500"
               >
-                Click to view Transaction
+                Click to view your Transaction
               </a>
             </p>
           )}
         </div>
       </div>
-  
+
       <div className="bg-gray-800 bg-opacity-80 p-6 rounded shadow-md w-full max-w-md w-90">
         <div>
           <p className="text-xl font-bold mb-4">Owned CHICS</p>
         </div>
         <p className="flex items-center mb-4">
           <span className="text-gray-400">Current CHICS: &nbsp;</span>
-          <span className="text-gray-300">
-            {balanceString}
-          </span>
+          <span className="text-gray-300">{balanceString}</span>
           <Image
             src="/images/manok.webp"
             alt="Additional Image"
@@ -356,9 +354,7 @@ export default function Home() {
         </p>
         <p className="flex items-center mb-4">
           <span className="text-gray-400">Staked CHICS: &nbsp;</span>
-          <span className="text-gray-300">
-            {stakedAmountString}
-          </span>
+          <span className="text-gray-300">{stakeTotalString}</span>
           <Image
             src="/images/manok.webp"
             alt="Additional Image"
@@ -391,13 +387,21 @@ export default function Home() {
         <p className="flex items-center mb-4">
           <span className="text-gray-400">Incubating CHICS: &nbsp;</span>
           <span className="text-gray-300">
-          <span style={{ color: elapsedStakeTime > 60 ? "LightGreen" : "Yellow" }}>
-              {elapsedStakeTime > 60
-                ? "You can now get CHICS"
-                : "Still Hatching"}
+            {stakeTotal > 0 ? (
+              <span
+                style={{
+                  color: elapsedStakeTime > 60 ? "LightGreen" : "Yellow",
+                }}
+              >
+                {elapsedStakeTime > 60
+                  ? "You can now get CHICS"
+                  : "Still Hatching"}
+              </span>
+            ) : (
+              <span style={{ color: "pink" }}>No CHICS staked</span>
+            )}
           </span>
-            </span>
-            <Image
+          <Image
             src="/images/manok.webp"
             alt="Additional Image"
             width={20}
@@ -409,8 +413,8 @@ export default function Home() {
               getElapsedStakeTime();
             }}
             className="ml-2"
-            >
-            <Image  
+          >
+            <Image
               src="/images/rfrsh.svg"
               alt="Left Image"
               width={13}
@@ -424,13 +428,11 @@ export default function Home() {
               }}
             />
           </button>
-          </p> 
+        </p>
 
         <p className="flex items-center mb-4">
           <span className="text-gray-400">Withdrawable CHICS: &nbsp;</span>
-          <span className="text-gray-300">
-            {withdrawAmountString}
-          </span>
+          <span className="text-gray-300">{withdrawInputString}</span>
           <Image
             src="/images/manok.webp"
             alt="Additional Image"
@@ -440,7 +442,7 @@ export default function Home() {
           />
           <button
             onClick={() => {
-              getWithdrawAmount();
+              getWithdrawInput();
             }}
             className="ml-2"
           >
@@ -465,16 +467,16 @@ export default function Home() {
         >
           Withdraw
         </button>
-        {submittedWithdraw && (
+        {withdrawOut && (
           <p className="text-green-500 mt-2">
             Withdrawal successful! Transaction Hash:{" "}
             <a
-              href={`https://etherscan.io/tx/${transactionHashWithdraw}`}
+              href={`https://etherscan.io/tx/${withdrawHash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-blue-500"
             >
-              Click to view Transaction
+              Click to view your Transaction
             </a>
           </p>
         )}
